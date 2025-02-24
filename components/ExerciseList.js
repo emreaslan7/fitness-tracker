@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase"; // Supabase bağlantısı
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import Image from "next/image";
 
 const exercises = [
   {
@@ -86,7 +86,6 @@ export default function ExerciseList() {
   const [completedExercises, setCompletedExercises] = useState([]);
   const [expandedExercise, setExpandedExercise] = useState(null);
   const [dailyCompleted, setDailyCompleted] = useState(false);
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD formatında tarih
 
   const toggleExercise = (id) => {
     setCompletedExercises((prev) =>
@@ -98,7 +97,10 @@ export default function ExerciseList() {
     setExpandedExercise(expandedExercise === id ? null : id);
   };
 
-  const markAllCompleted = async () => {};
+  const markAllCompleted = async () => {
+    setDailyCompleted(true);
+    setCompletedExercises(exercises.map((exercise) => exercise.id));
+  };
 
   return (
     <div className="p-4 w-full max-w-md mx-auto">
@@ -131,7 +133,7 @@ export default function ExerciseList() {
                 <p className="text-xs text-gray-500 mt-1">
                   Süre: {exercise.duration}
                 </p>
-                <img
+                <Image
                   src={exercise.gif}
                   alt={exercise.name}
                   className="mt-2 w-full rounded-md"
